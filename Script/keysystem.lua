@@ -21,16 +21,16 @@ BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
 BackgroundFrame.Position = UDim2.new(0, 0, 0, 0)
 
 Frame.Parent = BackgroundFrame
-Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Warna background hitam
 Frame.Size = UDim2.new(0.5, 0, 0.5, 0)
 Frame.Position = UDim2.new(0.25, 0, 0.25, 0)
 
 UICorner.Parent = Frame
-UICorner.CornerRadius = UDim.new(0.05, 0)
+UICorner.CornerRadius = UDim.new(0.05, 0) -- Radius sudut frame
 
 TitleLabel.Parent = Frame
 TitleLabel.Text = "XENON HUB"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- Warna teks putih
 TitleLabel.TextScaled = true
 TitleLabel.BackgroundTransparency = 1
 TitleLabel.Size = UDim2.new(0.8, 0, 0.2, 0)
@@ -43,18 +43,18 @@ TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
 
 VerifyButton.Parent = Frame
 VerifyButton.Text = "Verify Key"
-VerifyButton.Size = UDim2.new(0.38, 0, 0.2, 0)
+VerifyButton.Size = UDim2.new(0.38, 0, 0.2, 0) -- Ukuran tombol kiri
 VerifyButton.Position = UDim2.new(0.1, 0, 0.7, 0)
 
 GetKeyButton.Parent = Frame
 GetKeyButton.Text = "Get Key"
-GetKeyButton.Size = UDim2.new(0.38, 0, 0.2, 0)
+GetKeyButton.Size = UDim2.new(0.38, 0, 0.2, 0) -- Ukuran tombol kanan
 GetKeyButton.Position = UDim2.new(0.52, 0, 0.7, 0)
 
 TextLabel.Parent = Frame
 TextLabel.Text = ""
 TextLabel.Size = UDim2.new(0.8, 0, 0.1, 0)
-TextLabel.Position = UDim2.new(0.1, 0, 0.9, 0)
+TextLabel.Position = UDim2.new(0.1, 0, 0.9, 0) -- Posisikan TextLabel di bawah tombol
 TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
 TextLabel.BackgroundTransparency = 1
 
@@ -96,6 +96,8 @@ end)
 
 local http_request = syn and syn.request or request
 
+local keyValid = false
+
 local function validateKey(key)
     local url = "https://xenon-next-js-seven.vercel.app/api/validate-key"
     local response = http_request({
@@ -115,10 +117,8 @@ local function validateKey(key)
         local data = HttpService:JSONDecode(response.Body)
         if data.valid then
             print("Key is valid")
+            keyValid = true
             ScreenGui:Destroy()
-
-            -- Critical code to run after key validation
-            -- Insert your code here that should only run when the key is valid
         else
             TextLabel.Text = "Invalid key"
             print("Invalid key")
@@ -142,6 +142,9 @@ end)
 GetKeyButton.MouseButton1Click:Connect(function()
     local url = "https://xenon-next-js-seven.vercel.app"
     setclipboard(url)
-    TextLabel.Text = "URL copied to clipboard"
-    print("URL copied to clipboard:", url)
+    TextLabel.Text = "Copied to clipboard"
+    print("Copied to clipboard:", url)
 end)
+
+-- Wait until the key is validated
+repeat wait() until keyValid
